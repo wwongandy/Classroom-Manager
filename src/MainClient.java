@@ -12,6 +12,7 @@ public class MainClient {
 
 	private JFrame frame;
 	private JTextField fieldUsername;
+	private JTextField fieldStudentSurname;
 	private JTextArea consoleScreen;
 
 	/**
@@ -56,6 +57,10 @@ public class MainClient {
 		fieldUsername.setColumns(10);
 		
 		JButton buttonUserLogin = new JButton("Admin User Login");
+		buttonUserLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		buttonUserLogin.setBounds(260, 50, 140, 21);
 		frame.getContentPane().add(buttonUserLogin);
 		
@@ -70,7 +75,57 @@ public class MainClient {
 	 * Sets up the GUI for the main control panel view for a user.
 	 */
 	private void initializeControlPanelForUser() {
-
+		frame = new JFrame();
+		frame.setBounds(100, 100, 450, 300);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JLabel labelStudentSurname = new JLabel("Surname");
+		labelStudentSurname.setBounds(50, 50, 100, 13);
+		frame.getContentPane().add(labelStudentSurname);
+		
+		fieldStudentSurname = new JTextField();
+		fieldStudentSurname.setBounds(130, 50, 96, 19);
+		frame.getContentPane().add(fieldStudentSurname);
+		fieldStudentSurname.setColumns(10);
+		
+		JButton buttonStudentSearch = new JButton("Search Student");
+		buttonStudentSearch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		buttonStudentSearch.setBounds(260, 50, 140, 21);
+		frame.getContentPane().add(buttonStudentSearch);
+	
+		consoleScreen = new JTextArea();
+		consoleScreen.setEditable(false);
+		consoleScreen.setWrapStyleWord(true);
+		consoleScreen.setBounds(10, 150, 416, 103);
+		frame.getContentPane().add(consoleScreen);
+		
+		JButton buttonClear = new JButton("Clear");
+		buttonClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		buttonClear.setBounds(260, 81, 140, 21);
+		frame.getContentPane().add(buttonClear);
+		
+		JButton buttonPrevious = new JButton("<");
+		buttonPrevious.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		buttonPrevious.setBounds(50, 105, 85, 21);
+		frame.getContentPane().add(buttonPrevious);
+		
+		JButton buttonNext = new JButton(">");
+		buttonNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		buttonNext.setBounds(141, 105, 85, 21);
+		frame.getContentPane().add(buttonNext);
 	}
 
 	/**
@@ -79,5 +134,4 @@ public class MainClient {
 	private void initialize() {
 		initializeLoginScreen();
 	}
-
 }
