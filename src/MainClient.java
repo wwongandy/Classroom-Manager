@@ -126,12 +126,20 @@ public class MainClient {
 		});
 		buttonNext.setBounds(141, 105, 85, 21);
 		frame.getContentPane().add(buttonNext);
+		
+		JButton buttonExit = new JButton("X");
+		buttonExit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		buttonExit.setBounds(370, 10, 60, 21);
+		frame.getContentPane().add(buttonExit);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		initializeLoginScreen();
+		initializeControlPanelForUser();
 	}
 }
