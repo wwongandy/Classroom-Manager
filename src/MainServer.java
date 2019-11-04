@@ -1,5 +1,7 @@
 import java.awt.EventQueue;
 import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.Properties;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
@@ -62,7 +64,22 @@ public class MainServer {
 	 * Sets up JDBC connection to the locally hosted SQL database.
 	 */
 	private void connectToSQLDatabase() {
+		Properties connectionProps = new Properties();
 		
+		// Logging in using the SQL credentials
+		connectionProps.put("user", this.SQL_USERNAME);
+		connectionProps.put("password", this.SQL_PASSWORD);
+		
+		try {
+			// Making connection to the chosen database
+			sql = DriverManager.getConnection(
+					"jdbc:mysql://" + this.SERVER_NAME + ":" + this.PORT_NUMBER + "/" + this.DATABASE_NAME + "?serverTimezone=UTC",
+					connectionProps
+			);
+			
+			consoleScreen.append("Connected to SQL database " + DATABASE_NAME + ".\n");
+		} catch (Exception e) {
+		}
 	}
 	
 	/**
