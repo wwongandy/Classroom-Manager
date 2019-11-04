@@ -1,9 +1,19 @@
 import java.awt.EventQueue;
+import java.sql.Connection;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
 public class MainServer {
+	
+	// Local SQL database credentials
+	private final String SQL_USERNAME = "root";
+	private final String SQL_PASSWORD = "";
+	private final String SERVER_NAME = "localhost";
+	private final int PORT_NUMBER = 3306;
+	private final String DATABASE_NAME = "test";
+	private final String[] TABLE_NAMES = { "users", "students" };
+	private Connection sql; // Main connection variable to the database
 
 	// Swing GUI management
 	private JFrame frame;
