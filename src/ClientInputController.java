@@ -1,10 +1,15 @@
+import java.net.InetAddress;
+import java.net.Socket;
 
-public class ClientInputController {
+public class ClientInputController extends Thread {
 
-	private String hostName;
-	private String ipAddress;
+	private InetAddress ipAddress;
 	
 	public ClientInputController(Socket incomingSocket) {
+		ipAddress = incomingSocket.getInetAddress();
+	}
+	
+	public void run() {
 		
 	}
 }
