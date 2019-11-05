@@ -27,5 +27,5 @@ CREATE TABLE IF NOT EXISTS `students` (
 * Clone the project, and import it to your preferred IDE.
 * By default, the `mysql-connector-java.jar` file should be configured into the build path of the project, but otherwise; this but be added as a referenced library.
 * Setup a local MySQL localhost server using the tables configuration from above.
-* Ensure that your SQL database credentials are configured correctly onto the global SQL variables in `src/MainServer.java`.
+* Ensure that your SQL database credentials are configured correctly onto the global SQL variables in `src/DatabaseController.java`.
 * Now the Java program should run without any issues.
