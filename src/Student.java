@@ -1,16 +1,22 @@
-
 public class Student {
 
 	private int sid;
-	private int stud_id;
-	private String fname;
-	private String sname;
+	private int stud_id; // Student Id
+	private String fname; // First name
+	private String sname; // Surname
 	
 	public Student(String sid, String stud_id, String fname, String sname) {
 		this.setSid(sid);
 		this.setStud_id(stud_id);
 		this.setFname(fname);
 		this.setSname(sname);
+	}
+	
+	/**
+	 * Returns a string that describes a single student individual
+	 */
+	public String toString() {
+		return "Student ID: " + stud_id + ", Name: " + fname + " " + sname;
 	}
 	
 	public int getSid() {
