@@ -16,6 +16,8 @@ public class DatabaseController {
 	private final String[] TABLE_NAMES = { "users", "students" };
 	private Connection sql; // Main connection variable to the database
 	
+	private boolean isConnected; // Used to check if SQL connection is valid
+	
 	public DatabaseController() {
 		connectToSQLDatabase();
 	}
@@ -37,9 +39,12 @@ public class DatabaseController {
 					connectionProps
 			);
 			
-			// consoleScreen.append("Connected to SQL database " + DATABASE_NAME + ".\n");
+			this.setConnected(true);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		
+		this.setConnected(false);
 	}
 	
 	/**
@@ -113,5 +118,13 @@ public class DatabaseController {
 		}
 		
 		return null;
+	}
+
+	public boolean isConnected() {
+		return isConnected;
+	}
+
+	public void setConnected(boolean isConnected) {
+		this.isConnected = isConnected;
 	}
 }
