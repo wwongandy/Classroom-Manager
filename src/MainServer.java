@@ -1,6 +1,10 @@
 import java.awt.EventQueue;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.swing.JFrame;
@@ -55,7 +59,29 @@ public class MainServer {
 	 * Starts the server for handling user requests.
 	 */
 	private void initializeServer() {
+		ServerSocket serverSocket = null;
 		
+		try {
+			serverSocket = new ServerSocket(8000);
+			consoleScreen.append("Server started at " + new Date() + '\n');
+		} catch (IOException e) {
+			e.printStackTrace();
+			consoleScreen.append("Server could not be started.\n");
+			
+			return;
+		}
+		
+		// Listening for a connection request
+		while (true) {
+			try {
+				Socket incomingSocket = serverSocket.accept();
+				ClientInputController clientIn = new ClientInputController(incomingSocket, consoleScreen);
+				
+				clientIn.start();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	/**
