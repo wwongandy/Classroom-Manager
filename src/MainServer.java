@@ -9,6 +9,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 public class MainServer extends JFrame {
+	
+	public static int PORT_NUMBER = 8000;
 
 	// Swing GUI management
 	private JTextArea consoleScreen = new JTextArea();
@@ -35,7 +37,7 @@ public class MainServer extends JFrame {
 		setVisible(true);
 		
 		try {
-			ServerSocket serverSocket = new ServerSocket(8000);
+			ServerSocket serverSocket = new ServerSocket(MainServer.PORT_NUMBER);
 			consoleScreen.append("Server started at " + new Date() + '\n');
 			
 			// Listening for connections, for each: new thread to handle individual requests concurrently

@@ -1,6 +1,10 @@
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -10,10 +14,16 @@ import javax.swing.JTextField;
 
 public class MainClient {
 
+	// Swing GUI management
 	private JFrame frame;
 	private JTextField fieldUsername;
 	private JTextField fieldStudentSurname;
 	private JTextArea consoleScreen;
+	
+	// Server's connection socket and IO streams for reading/writing back to server
+	private Socket outcomingSocket;
+	private DataOutputStream outputToServer;
+	private DataInputStream inputFromServer;
 
 	/**
 	 * Launch the application.
@@ -135,11 +145,25 @@ public class MainClient {
 		buttonExit.setBounds(370, 10, 60, 21);
 		frame.getContentPane().add(buttonExit);
 	}
+	
+	/**
+	 * Makes a connection to the localhost server
+	 */
+	public void initializeConnection() {
+		try {
+			outcomingSocket = new Socket("localhost", MainServer.PORT_NUMBER);
+			outputToServer = new DataOutputStream(outcomingSocket.getOutputStream());
+			inputFromServer = new DataInputStream(outcomingSocket.getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	};
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		initializeControlPanelForUser();
+		initializeLoginScreen();
+		initializeConnection();
 	}
 }
