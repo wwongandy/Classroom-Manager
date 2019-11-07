@@ -3,12 +3,12 @@ import java.net.Socket;
 
 import javax.swing.JTextArea;
 
-public class ClientInputController extends Thread {
+public class ClientController extends Thread {
 
 	private Socket socket;
 	private JTextArea consoleScreen;
 	
-	public ClientInputController(Socket incomingSocket, JTextArea consoleScreen) {
+	public ClientController(Socket incomingSocket, JTextArea consoleScreen) {
 		this.setSocket(incomingSocket);
 		this.setConsoleScreen(consoleScreen);
 	}

@@ -41,7 +41,7 @@ public class MainServer extends JFrame {
 			// Listening for connections, for each: new thread to handle individual requests concurrently
 			while (true) {
 				Socket incomingSocket = serverSocket.accept();
-				ClientInputController clientIn = new ClientInputController(incomingSocket, consoleScreen);
+				ClientController clientIn = new ClientController(incomingSocket, consoleScreen);
 				
 				clientIn.start();
 			}
