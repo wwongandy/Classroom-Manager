@@ -1,94 +1,53 @@
-import java.awt.EventQueue;
+import java.awt.BorderLayout;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.Date;
-import java.util.Properties;
 
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-public class MainServer {
+public class MainServer extends JFrame {
 
 	// Swing GUI management
-	private JFrame frame;
-	private JTextArea consoleScreen;
+	private JTextArea consoleScreen = new JTextArea();
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainServer window = new MainServer();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+		new MainServer();
 	}
 
 	/**
-	 * Create the application.
+	 * Starts the server and sets up the console screen content.
 	 */
 	public MainServer() {
-		initialize();
-	}
-	
-	/**
-	 * Sets up the main GUI console screen for the server.
-	 */
-	private void initializeConsoleScreen() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
-		
-		consoleScreen = new JTextArea();
+		getContentPane().setLayout(new BorderLayout());
 		consoleScreen.setEditable(false);
-		consoleScreen.setWrapStyleWord(true);
-		consoleScreen.setBounds(10, 10, 415, 240);
-		frame.getContentPane().add(consoleScreen);
-	}
-	
-	/**
-	 * Starts the server for handling user requests.
-	 */
-	private void initializeServer() {
-		ServerSocket serverSocket = null;
+		getContentPane().add(new JScrollPane(consoleScreen), BorderLayout.CENTER);
+		
+		// Main frame setup
+		setTitle("Server");
+		setSize(500, 300);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
 		
 		try {
-			serverSocket = new ServerSocket(8000);
+			ServerSocket serverSocket = new ServerSocket(8000);
 			consoleScreen.append("Server started at " + new Date() + '\n');
-		} catch (IOException e) {
-			e.printStackTrace();
-			consoleScreen.append("Server could not be started.\n");
 			
-			return;
-		}
-		
-		// Listening for a connection request
-		while (true) {
-			try {
+			// Listening for connections, for each: new thread to handle individual requests concurrently
+			while (true) {
 				Socket incomingSocket = serverSocket.accept();
 				ClientInputController clientIn = new ClientInputController(incomingSocket, consoleScreen);
 				
 				clientIn.start();
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * Initialize the contents of the frame.
-	 */
-	private void initialize() {
-		initializeConsoleScreen();
-		initializeServer();
 	}
 }
