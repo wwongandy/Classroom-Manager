@@ -60,7 +60,7 @@ public class DatabaseController {
 			
 			stmt.executeQuery(
 					"SELECT * FROM `users` " +
-					"WHERE (UNAME = " + uname + ")"
+					"WHERE (UNAME = '" + uname + "')"
 			);
 			
 			ResultSet found = stmt.getResultSet();
@@ -110,7 +110,7 @@ public class DatabaseController {
 			
 			stmt.executeQuery(
 					"SELECT * FROM `students` " +
-					"WHERE (SNAME = " + sname + ")"
+					"WHERE (SNAME = '" + sname + "')"
 			);
 			
 			return stmt.getResultSet();
