@@ -5,6 +5,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -176,6 +177,11 @@ public class MainClient {
 		buttonExit.setVisible(true);
 	}
 	
+	private void writeToConsole(String message) {
+		String out = "[" + new Date() + "] " + message + '\n';
+		consoleScreen.append(out);
+	}
+	
 	/**
 	 * Makes a connection to the LocalHost server.
 	 */
@@ -205,6 +211,8 @@ public class MainClient {
 		String username = fieldUsername.getText();
 		
 		if (username.isBlank()) {
+			writeToConsole("The username field must not be empty.");
+			
 			return;
 		};
 		
@@ -212,7 +220,10 @@ public class MainClient {
 			outputToServer.writeUTF("login-" + username);
 			
 			if (inputFromServer.readBoolean()) {
+				writeToConsole("User found in server, login successful.");
 				initializeControlPanelForUser();
+			} else {
+				writeToConsole("User not found in server, login failed.");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
