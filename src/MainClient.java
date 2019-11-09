@@ -77,25 +77,20 @@ public class MainClient {
 		buttonUserLogin = new JButton("Admin User Login");
 		buttonUserLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String username = fieldUsername.getText();
-				
-				if (username.isBlank()) {
-					return;
-				};
-				
-				try {
-					outputToServer.writeUTF("login-" + username);
-					
-					if (inputFromServer.readBoolean()) {
-						initializeControlPanelForUser();
-					}
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+				loginHandler();
 			}
 		});
 		buttonUserLogin.setBounds(260, 50, 140, 21);
 		frame.getContentPane().add(buttonUserLogin);
+		
+		buttonClear = new JButton("Clear");
+		buttonClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clearTextFields();
+			}
+		});
+		buttonClear.setBounds(260, 81, 140, 21);
+		frame.getContentPane().add(buttonClear);
 		
 		consoleScreen = new JTextArea();
 		consoleScreen.setEditable(false);
@@ -115,22 +110,16 @@ public class MainClient {
 		buttonStudentSearch = new JButton("Search Student");
 		buttonStudentSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				studentSearchHandler();
 			}
 		});
 		buttonStudentSearch.setBounds(260, 50, 140, 21);
 		frame.getContentPane().add(buttonStudentSearch);
 		
-		buttonClear = new JButton("Clear");
-		buttonClear.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		buttonClear.setBounds(260, 81, 140, 21);
-		frame.getContentPane().add(buttonClear);
-		
 		buttonPrevious = new JButton("<");
 		buttonPrevious.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				previousStudentHandler();
 			}
 		});
 		buttonPrevious.setBounds(50, 105, 85, 21);
@@ -139,6 +128,7 @@ public class MainClient {
 		buttonNext = new JButton(">");
 		buttonNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				nextStudentHandler();
 			}
 		});
 		buttonNext.setBounds(141, 105, 85, 21);
@@ -165,7 +155,6 @@ public class MainClient {
 		labelStudentSurname.setVisible(false);
 		fieldStudentSurname.setVisible(false);
 		buttonStudentSearch.setVisible(false);
-		buttonClear.setVisible(false);
 		buttonPrevious.setVisible(false);
 		buttonNext.setVisible(false);
 		buttonExit.setVisible(false);
@@ -182,7 +171,6 @@ public class MainClient {
 		labelStudentSurname.setVisible(true);
 		fieldStudentSurname.setVisible(true);
 		buttonStudentSearch.setVisible(true);
-		buttonClear.setVisible(true);
 		buttonPrevious.setVisible(true);
 		buttonNext.setVisible(true);
 		buttonExit.setVisible(true);
@@ -208,5 +196,55 @@ public class MainClient {
 		initializeConnection();
 		initializeGUI();
 		initializeLoginScreen();
+	}
+	
+	/**
+	 * Sends an authentication request to the server and attempts to logs in to the control panel view
+	 */
+	private void loginHandler() {
+		String username = fieldUsername.getText();
+		
+		if (username.isBlank()) {
+			return;
+		};
+		
+		try {
+			outputToServer.writeUTF("login-" + username);
+			
+			if (inputFromServer.readBoolean()) {
+				initializeControlPanelForUser();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Clears out all text fields from the GUI.
+	 */
+	private void clearTextFields() {
+		fieldUsername.setText("");
+		fieldStudentSurname.setText("");
+	}
+	
+	/**
+	 * Attempts to search for an existing student from the database via the server
+	 */
+	private void studentSearchHandler() {
+		
+	}
+	
+	/**
+	 * Retrieves the previous student from the current selected list (searched student, or all students) via the server
+	 */
+	private void previousStudentHandler() {
+		
+	}
+	
+	/**
+	 * Retrieves the next student from the current selected list (searched student, or all students) via the server
+	 */
+	private void nextStudentHandler() {
+		
 	}
 }
