@@ -47,7 +47,7 @@ public class MainServer extends JFrame {
 		// Server setup.
 		try {
 			ServerSocket serverSocket = new ServerSocket(MainServer.PORT_NUMBER);
-			consoleScreen.append("Server started at " + new Date() + '\n');
+			consoleScreen.append("[Server] [" + new Date() + "] Server started.\n");
 			
 			// Listening for connections, for each: new thread to handle individual requests concurrently.
 			while (true) {

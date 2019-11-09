@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JTextArea;
 
@@ -54,9 +55,6 @@ public class ClientController extends Thread {
 				String request = requestBody[0];
 				String dataObject = requestBody[1];
 				
-				writeToConsole("Request received: " + request);
-				writeToConsole("Data received: " + dataObject);
-				
 				switch(request) {
 					case "login":
 						loginHandler(dataObject);
@@ -89,7 +87,7 @@ public class ClientController extends Thread {
 		InetAddress netData = socket.getInetAddress();
 		String ipAddress = netData.getHostAddress();
 		
-		String out = "[Client " + clientNumber +  "] [" + ipAddress + "] " + message + '\n';
+		String out = "[Client " + clientNumber +  "] [" + new Date() +  "] [" + ipAddress + "] " + message + '\n';
 		consoleScreen.append(out);
 	}
 	
