@@ -7,19 +7,22 @@ import java.net.Socket;
 import javax.swing.JTextArea;
 
 public class ClientController extends Thread {
-
+	
 	// Client's socket and IO streams for reading/writing back to client
 	private Socket socket;
 	private DataInputStream inputFromClient;
 	private DataOutputStream outputToClient;
 	
+	private int clientNumber; // Used to differentiate between different clients for a server
+	
 	// For appending messages back to the server GUI
 	private JTextArea consoleScreen;
 	
-	public ClientController(Socket incomingSocket, JTextArea consoleScreen) throws IOException {
+	public ClientController(Socket incomingSocket, int clientNumber, JTextArea consoleScreen) throws IOException {
 		this.setSocket(incomingSocket);
 		this.setInputFromClient(new DataInputStream(incomingSocket.getInputStream()));
 		this.setOutputToClient(new DataOutputStream(incomingSocket.getOutputStream()));
+		this.setClientNumber(clientNumber);
 		this.setConsoleScreen(consoleScreen);
 		writeToConsole("Connected to server.");
 	}
@@ -48,7 +51,7 @@ public class ClientController extends Thread {
 		InetAddress netData = socket.getInetAddress();
 		String ipAddress = netData.getHostAddress();
 		
-		String out = "[" + ipAddress + "] " + message + '\n';
+		String out = "[Client " + clientNumber +  "] [" + ipAddress + "] " + message + '\n';
 		consoleScreen.append(out);
 	}
 
@@ -82,5 +85,13 @@ public class ClientController extends Thread {
 
 	public void setConsoleScreen(JTextArea consoleScreen) {
 		this.consoleScreen = consoleScreen;
+	}
+	
+	public int getClientNumber() {
+		return clientNumber;
+	}
+
+	public void setClientNumber(int clientNumber) {
+		this.clientNumber = clientNumber;
 	}
 }

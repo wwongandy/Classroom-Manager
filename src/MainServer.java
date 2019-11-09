@@ -11,6 +11,7 @@ import javax.swing.JTextArea;
 public class MainServer extends JFrame {
 	
 	public static int PORT_NUMBER = 8000;
+	private int connectionsCount = 0; // Keeping count of client connections
 
 	// Swing GUI management
 	private JTextArea consoleScreen = new JTextArea();
@@ -51,7 +52,9 @@ public class MainServer extends JFrame {
 			// Listening for connections, for each: new thread to handle individual requests concurrently.
 			while (true) {
 				Socket incomingSocket = serverSocket.accept();
-				ClientController clientIn = new ClientController(incomingSocket, consoleScreen);
+				
+				connectionsCount += 1;
+				ClientController clientIn = new ClientController(incomingSocket, connectionsCount, consoleScreen);
 				
 				clientIn.start();
 			}
