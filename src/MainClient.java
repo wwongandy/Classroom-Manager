@@ -4,7 +4,9 @@ import java.awt.event.ActionListener;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JButton;
@@ -12,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JScrollPane;
 
 public class MainClient {
 
@@ -33,6 +36,9 @@ public class MainClient {
 	private Socket outcomingSocket;
 	private DataOutputStream outputToServer;
 	private DataInputStream inputFromServer;
+	
+	private ArrayList<Student> currentStudents;
+	private int currentStudentIndex;
 
 	/**
 	 * Launch the application.
@@ -54,6 +60,9 @@ public class MainClient {
 	 * Create the application.
 	 */
 	public MainClient() {
+		currentStudents = new ArrayList();
+		currentStudentIndex = 0;
+		
 		initialize();
 	}
 	
@@ -92,12 +101,6 @@ public class MainClient {
 		});
 		buttonClear.setBounds(260, 81, 140, 21);
 		frame.getContentPane().add(buttonClear);
-		
-		consoleScreen = new JTextArea();
-		consoleScreen.setEditable(false);
-		consoleScreen.setWrapStyleWord(true);
-		consoleScreen.setBounds(10, 150, 416, 103);
-		frame.getContentPane().add(consoleScreen);
 		
 		labelStudentSurname = new JLabel("Surname");
 		labelStudentSurname.setBounds(50, 50, 100, 13);
@@ -143,6 +146,15 @@ public class MainClient {
 		});
 		buttonExit.setBounds(370, 10, 60, 21);
 		frame.getContentPane().add(buttonExit);
+		
+		consoleScreen = new JTextArea();
+		consoleScreen.setEditable(false);
+		consoleScreen.setWrapStyleWord(true);
+		consoleScreen.setBounds(10, 150, 416, 103);
+		
+		JScrollPane scrollPane = new JScrollPane(consoleScreen);
+		scrollPane.setBounds(10, 150, 416, 103);
+		frame.getContentPane().add(scrollPane);
 	}
 	
 	/**
@@ -177,6 +189,11 @@ public class MainClient {
 		buttonExit.setVisible(true);
 	}
 	
+	/**
+	 * Appends the given message to the console GUI.
+	 * 
+	 * @param message
+	 */
 	private void writeToConsole(String message) {
 		String out = "[" + new Date() + "] " + message + '\n';
 		consoleScreen.append(out);
@@ -240,9 +257,35 @@ public class MainClient {
 	
 	/**
 	 * Attempts to search for an existing student from the database via the server
+	 * 
+	 * @throws ClassNotFoundException 
 	 */
 	private void studentSearchHandler() {
+		String studentSurname = fieldStudentSurname.getText();
 		
+		if (studentSurname.isBlank()) {
+			writeToConsole("The student surname field must not be empty.");
+			
+			return;
+		}
+		
+		try {
+			outputToServer.writeUTF("studentSurnameSearch-" + studentSurname);
+			
+			// Reading in an object response from the server
+			ObjectInputStream objInputStreamFromServer = new ObjectInputStream(outcomingSocket.getInputStream());
+			currentStudents = (ArrayList) objInputStreamFromServer.readUnshared();
+			
+			if (currentStudents.isEmpty()) {
+				writeToConsole("No students found with surname " + studentSurname + ".");
+			} else {
+				writeToConsole(currentStudents.size() + " students found with surname " + studentSurname + ".");
+				writeToConsole(currentStudents.get(currentStudentIndex).toString());
+			}
+			
+		} catch (IOException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**

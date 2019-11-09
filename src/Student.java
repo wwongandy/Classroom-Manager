@@ -1,7 +1,8 @@
+import java.io.Serializable;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Student {
+public class Student implements Serializable {
 
 	private int sid;
 	private int stud_id; // Student Id
