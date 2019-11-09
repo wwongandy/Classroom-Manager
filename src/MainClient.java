@@ -237,10 +237,10 @@ public class MainClient {
 			outputToServer.writeUTF("login-" + username);
 			
 			if (inputFromServer.readBoolean()) {
-				writeToConsole("User found in server, login successful.");
+				writeToConsole("User " + username + " found in server, login successful.");
 				initializeControlPanelForUser();
 			} else {
-				writeToConsole("User not found in server, login failed.");
+				writeToConsole("User " + username + " not found in server, login failed.");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -280,6 +280,8 @@ public class MainClient {
 				writeToConsole("No students found with surname " + studentSurname + ".");
 			} else {
 				writeToConsole(currentStudents.size() + " students found with surname " + studentSurname + ".");
+				
+				currentStudentIndex = 0;
 				writeToConsole(currentStudents.get(currentStudentIndex).toString());
 			}
 			
@@ -292,13 +294,33 @@ public class MainClient {
 	 * Retrieves the previous student from the current selected list (searched student, or all students) via the server
 	 */
 	private void previousStudentHandler() {
+		if (currentStudents.isEmpty()) {
+			// TODO: Load all students from database
+			return;
+		};
 		
+		currentStudentIndex -= 1;
+		if (currentStudentIndex < 0) {
+			currentStudentIndex = currentStudents.size() - 1;
+		}
+		
+		writeToConsole(currentStudents.get(currentStudentIndex).toString());
 	}
 	
 	/**
 	 * Retrieves the next student from the current selected list (searched student, or all students) via the server
 	 */
 	private void nextStudentHandler() {
+		if (currentStudents.isEmpty()) {
+			// TODO: Load all students from database
+			return;
+		};
 		
+		currentStudentIndex += 1;
+		if (currentStudentIndex >= currentStudents.size()) {
+			currentStudentIndex = 0;
+		}
+		
+		writeToConsole(currentStudents.get(currentStudentIndex).toString());
 	}
 }
