@@ -248,9 +248,12 @@ public class MainClient {
 	}
 	
 	/**
-	 * Clears out all text fields from the GUI.
+	 * Clears out all cached data and text fields from the GUI.
 	 */
 	private void clearTextFields() {
+		currentStudents = new ArrayList();
+		currentStudentIndex = 0;
+		
 		fieldUsername.setText("");
 		fieldStudentSurname.setText("");
 	}
@@ -291,36 +294,78 @@ public class MainClient {
 	}
 	
 	/**
+	 * Retrieves the most recently loaded list of students from the object input stream provided by the server.
+	 * Also displays the first student to the GUI.
+	 * 
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	private void retrieveAllStudentsFromInputStream() throws IOException, ClassNotFoundException {
+		ObjectInputStream objInputStreamFromServer = new ObjectInputStream(outcomingSocket.getInputStream());
+		currentStudents = (ArrayList) objInputStreamFromServer.readUnshared();
+		
+		if (currentStudents.isEmpty()) {
+			writeToConsole("No students found.");
+		} else {
+			// Show the first student by default
+			currentStudentIndex = 0;
+			
+			writeToConsole(currentStudents.size() + " students found.");
+			writeToConsole(currentStudents.get(currentStudentIndex).toString());
+		}
+	}
+	
+	/**
 	 * Retrieves the previous student from the current selected list (searched student, or all students) via the server
 	 */
 	private void previousStudentHandler() {
+		
+		// Get list of all students if none loaded
 		if (currentStudents.isEmpty()) {
-			// TODO: Load all students from database
-			return;
-		};
-		
-		currentStudentIndex -= 1;
-		if (currentStudentIndex < 0) {
-			currentStudentIndex = currentStudents.size() - 1;
+			
+			try {
+				outputToServer.writeUTF("studentAll-null");
+				retrieveAllStudentsFromInputStream();
+			} catch (IOException | ClassNotFoundException e) {
+				writeToConsole("No students found.");
+				e.printStackTrace();
+			}
+			
+		} else {
+			// Only goto previous student if students already loaded
+			currentStudentIndex -= 1;
+			if (currentStudentIndex < 0) {
+				currentStudentIndex = currentStudents.size() - 1;
+			}
+			
+			writeToConsole(currentStudents.get(currentStudentIndex).toString());
 		}
-		
-		writeToConsole(currentStudents.get(currentStudentIndex).toString());
 	}
 	
 	/**
 	 * Retrieves the next student from the current selected list (searched student, or all students) via the server
 	 */
 	private void nextStudentHandler() {
+		
+		// Get list of all students if none loaded
 		if (currentStudents.isEmpty()) {
-			// TODO: Load all students from database
-			return;
-		};
-		
-		currentStudentIndex += 1;
-		if (currentStudentIndex >= currentStudents.size()) {
-			currentStudentIndex = 0;
+			
+			try {
+				outputToServer.writeUTF("studentAll-null");
+				retrieveAllStudentsFromInputStream();
+			} catch (IOException | ClassNotFoundException e) {
+				writeToConsole("No students found.");
+				e.printStackTrace();
+			}
+			
+		} else {
+			// Only goto next student if students already loaded
+			currentStudentIndex += 1;
+			if (currentStudentIndex >= currentStudents.size()) {
+				currentStudentIndex = 0;
+			}
+			
+			writeToConsole(currentStudents.get(currentStudentIndex).toString());
 		}
-		
-		writeToConsole(currentStudents.get(currentStudentIndex).toString());
 	}
 }

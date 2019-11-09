@@ -66,6 +66,10 @@ public class ClientController extends Thread {
 						studentSearchHandler(dataObject);
 						break;
 						
+					case "studentAll":
+						previousOrNextStudentHandler();
+						break;
+						
 					default:
 						break;
 				}
@@ -134,6 +138,27 @@ public class ClientController extends Thread {
 		
 		ObjectOutputStream objOutputStreamToClient = new ObjectOutputStream(socket.getOutputStream());
 		objOutputStreamToClient.writeUnshared(studentsFound);
+	}
+	
+	private void previousOrNextStudentHandler() throws SQLException, IOException {
+		writeToConsole("Attempting to retrieve all students..");
+		
+		ResultSet _allStudents = db.getAllStudentRecords();
+		ArrayList<Student> allStudents = new ArrayList();
+		
+		if (_allStudents.next() == false) {
+			writeToConsole("No students found.");
+		} else {
+			writeToConsole("Students found.");
+			
+			do {
+				Student student = Student.fromResultSet(_allStudents);
+				allStudents.add(student);
+			} while (_allStudents.next());
+		}
+		
+		ObjectOutputStream objOutputStreamToClient = new ObjectOutputStream(socket.getOutputStream());
+		objOutputStreamToClient.writeUnshared(allStudents);
 	}
 
 	public Socket getSocket() {
