@@ -40,6 +40,7 @@ public class DatabaseController {
 			);
 			
 			this.setConnected(true);
+			return;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

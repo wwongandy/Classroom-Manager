@@ -13,6 +13,7 @@ public class ClientController extends Thread {
 	private DataInputStream inputFromClient;
 	private DataOutputStream outputToClient;
 	
+	private DatabaseController db; // For handling client requests to the database
 	private int clientNumber; // Used to differentiate between different clients for a server
 	
 	// For appending messages back to the server GUI
@@ -23,8 +24,15 @@ public class ClientController extends Thread {
 		this.setInputFromClient(new DataInputStream(incomingSocket.getInputStream()));
 		this.setOutputToClient(new DataOutputStream(incomingSocket.getOutputStream()));
 		this.setClientNumber(clientNumber);
+		this.setDB(new DatabaseController());
 		this.setConsoleScreen(consoleScreen);
-		writeToConsole("Connected to server.");
+		
+		if (db.isConnected()) {
+			writeToConsole("Connected to server.");
+		} else {
+			writeToConsole("Attempted to connect to server but failed due to database controller.");
+			this.interrupt();
+		}
 	}
 	
 	public void run() {
@@ -36,10 +44,17 @@ public class ClientController extends Thread {
 				String request = requestBody[0];
 				String dataObject = requestBody[1];
 				
-				System.out.println(request);
-				System.out.println(dataObject);
 				writeToConsole("Request received: " + request);
 				writeToConsole("Data received: " + dataObject);
+				
+				switch(request) {
+					case "login":
+						writeToConsole("Attempting to login user..");
+						break;
+						
+					default:
+						break;
+				}
 				
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -78,13 +93,13 @@ public class ClientController extends Thread {
 	public void setOutputToClient(DataOutputStream outputToClient) {
 		this.outputToClient = outputToClient;
 	}
-
-	public JTextArea getConsoleScreen() {
-		return consoleScreen;
+	
+	public DatabaseController getDB() {
+		return db;
 	}
 
-	public void setConsoleScreen(JTextArea consoleScreen) {
-		this.consoleScreen = consoleScreen;
+	public void setDB(DatabaseController db) {
+		this.db = db;
 	}
 	
 	public int getClientNumber() {
@@ -93,5 +108,13 @@ public class ClientController extends Thread {
 
 	public void setClientNumber(int clientNumber) {
 		this.clientNumber = clientNumber;
+	}
+	
+	public JTextArea getConsoleScreen() {
+		return consoleScreen;
+	}
+
+	public void setConsoleScreen(JTextArea consoleScreen) {
+		this.consoleScreen = consoleScreen;
 	}
 }
