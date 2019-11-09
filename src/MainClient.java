@@ -16,8 +16,16 @@ public class MainClient {
 
 	// Swing GUI management
 	private JFrame frame;
+	private JLabel labelUsername;
 	private JTextField fieldUsername;
+	private JButton buttonUserLogin;
+	private JLabel labelStudentSurname;
 	private JTextField fieldStudentSurname;
+	private JButton buttonStudentSearch;
+	private JButton buttonClear;
+	private JButton buttonPrevious;
+	private JButton buttonNext;
+	private JButton buttonExit;
 	private JTextArea consoleScreen;
 	
 	// Server's connection socket and IO streams for reading/writing back to server
@@ -49,15 +57,15 @@ public class MainClient {
 	}
 	
 	/**
-	 * Sets up the GUI for the starting login screen.
+	 * Sets up the GUI for the login and control panel screens.
 	 */
-	private void initializeLoginScreen() {
+	private void initializeGUI() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel labelUsername = new JLabel("Username");
+		labelUsername = new JLabel("Username");
 		labelUsername.setBounds(50, 50, 100, 13);
 		frame.getContentPane().add(labelUsername);
 		
@@ -66,7 +74,7 @@ public class MainClient {
 		frame.getContentPane().add(fieldUsername);
 		fieldUsername.setColumns(10);
 		
-		JButton buttonUserLogin = new JButton("Admin User Login");
+		buttonUserLogin = new JButton("Admin User Login");
 		buttonUserLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String username = fieldUsername.getText();
@@ -77,6 +85,10 @@ public class MainClient {
 				
 				try {
 					outputToServer.writeUTF("login-" + username);
+					
+					if (inputFromServer.readBoolean()) {
+						initializeControlPanelForUser();
+					}
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -90,18 +102,8 @@ public class MainClient {
 		consoleScreen.setWrapStyleWord(true);
 		consoleScreen.setBounds(10, 150, 416, 103);
 		frame.getContentPane().add(consoleScreen);
-	}
-	
-	/**
-	 * Sets up the GUI for the main control panel view for a user.
-	 */
-	private void initializeControlPanelForUser() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
 		
-		JLabel labelStudentSurname = new JLabel("Surname");
+		labelStudentSurname = new JLabel("Surname");
 		labelStudentSurname.setBounds(50, 50, 100, 13);
 		frame.getContentPane().add(labelStudentSurname);
 		
@@ -110,21 +112,15 @@ public class MainClient {
 		frame.getContentPane().add(fieldStudentSurname);
 		fieldStudentSurname.setColumns(10);
 		
-		JButton buttonStudentSearch = new JButton("Search Student");
+		buttonStudentSearch = new JButton("Search Student");
 		buttonStudentSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		buttonStudentSearch.setBounds(260, 50, 140, 21);
 		frame.getContentPane().add(buttonStudentSearch);
-	
-		consoleScreen = new JTextArea();
-		consoleScreen.setEditable(false);
-		consoleScreen.setWrapStyleWord(true);
-		consoleScreen.setBounds(10, 150, 416, 103);
-		frame.getContentPane().add(consoleScreen);
 		
-		JButton buttonClear = new JButton("Clear");
+		buttonClear = new JButton("Clear");
 		buttonClear.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -132,7 +128,7 @@ public class MainClient {
 		buttonClear.setBounds(260, 81, 140, 21);
 		frame.getContentPane().add(buttonClear);
 		
-		JButton buttonPrevious = new JButton("<");
+		buttonPrevious = new JButton("<");
 		buttonPrevious.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -140,7 +136,7 @@ public class MainClient {
 		buttonPrevious.setBounds(50, 105, 85, 21);
 		frame.getContentPane().add(buttonPrevious);
 		
-		JButton buttonNext = new JButton(">");
+		buttonNext = new JButton(">");
 		buttonNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -148,13 +144,48 @@ public class MainClient {
 		buttonNext.setBounds(141, 105, 85, 21);
 		frame.getContentPane().add(buttonNext);
 		
-		JButton buttonExit = new JButton("X");
+		buttonExit = new JButton("X");
 		buttonExit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				initializeLoginScreen();
 			}
 		});
 		buttonExit.setBounds(370, 10, 60, 21);
 		frame.getContentPane().add(buttonExit);
+	}
+	
+	/**
+	 * Sets up the GUI for the starting login screen.
+	 * Hides all the frame contents for the control panel screen.
+	 */
+	private void initializeLoginScreen() {
+		labelUsername.setVisible(true);
+		fieldUsername.setVisible(true);
+		buttonUserLogin.setVisible(true);
+		labelStudentSurname.setVisible(false);
+		fieldStudentSurname.setVisible(false);
+		buttonStudentSearch.setVisible(false);
+		buttonClear.setVisible(false);
+		buttonPrevious.setVisible(false);
+		buttonNext.setVisible(false);
+		buttonExit.setVisible(false);
+	}
+	
+	/**
+	 * Sets up the GUI for the main control panel view for a user.
+	 * Hides all the frame contents for the login screen.
+	 */
+	private void initializeControlPanelForUser() {
+		labelUsername.setVisible(false);
+		fieldUsername.setVisible(false);
+		buttonUserLogin.setVisible(false);
+		labelStudentSurname.setVisible(true);
+		fieldStudentSurname.setVisible(true);
+		buttonStudentSearch.setVisible(true);
+		buttonClear.setVisible(true);
+		buttonPrevious.setVisible(true);
+		buttonNext.setVisible(true);
+		buttonExit.setVisible(true);
 	}
 	
 	/**
@@ -175,6 +206,7 @@ public class MainClient {
 	 */
 	private void initialize() {
 		initializeConnection();
+		initializeGUI();
 		initializeLoginScreen();
 	}
 }

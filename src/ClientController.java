@@ -50,6 +50,17 @@ public class ClientController extends Thread {
 				switch(request) {
 					case "login":
 						writeToConsole("Attempting to login user..");
+						
+						boolean canLogin = db.userLogin(dataObject);
+						// outputToClient.writeUTF("login-" + canLogin);
+						outputToClient.writeBoolean(canLogin);
+						
+						if (canLogin) {
+							writeToConsole("User " + dataObject + " logged in.");
+						} else {
+							writeToConsole("User " + dataObject + " was denied login attempt.");
+						}
+						
 						break;
 						
 					default:
