@@ -50,7 +50,7 @@ public class MainClient {
 					MainClient window = new MainClient();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					// e.printStackTrace();
 				}
 			}
 		});
@@ -208,7 +208,7 @@ public class MainClient {
 			outputToServer = new DataOutputStream(outcomingSocket.getOutputStream());
 			inputFromServer = new DataInputStream(outcomingSocket.getInputStream());
 		} catch (IOException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	};
 
@@ -243,7 +243,7 @@ public class MainClient {
 				writeToConsole("User " + username + " not found in server, login failed.");
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 	
@@ -289,7 +289,7 @@ public class MainClient {
 			}
 			
 		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 	
@@ -328,7 +328,7 @@ public class MainClient {
 				retrieveAllStudentsFromInputStream();
 			} catch (IOException | ClassNotFoundException e) {
 				writeToConsole("No students found.");
-				e.printStackTrace();
+				// e.printStackTrace();
 			}
 			
 		} else {
@@ -355,7 +355,7 @@ public class MainClient {
 				retrieveAllStudentsFromInputStream();
 			} catch (IOException | ClassNotFoundException e) {
 				writeToConsole("No students found.");
-				e.printStackTrace();
+				// e.printStackTrace();
 			}
 			
 		} else {

@@ -60,7 +60,7 @@ public class MainServer extends JFrame {
 			}
 			
 		} catch (IOException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 	}
 }

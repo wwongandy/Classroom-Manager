@@ -42,7 +42,7 @@ public class DatabaseController {
 			this.setConnected(true);
 			return;
 		} catch (Exception e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 		
 		this.setConnected(false);
@@ -71,7 +71,7 @@ public class DatabaseController {
 			
 			return loggedIn;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 		
 		return false;
@@ -92,7 +92,7 @@ public class DatabaseController {
 			
 			return stmt.getResultSet();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 		
 		return null;
@@ -115,7 +115,7 @@ public class DatabaseController {
 			
 			return stmt.getResultSet();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			// e.printStackTrace();
 		}
 		
 		return null;

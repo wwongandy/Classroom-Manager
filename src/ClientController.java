@@ -75,7 +75,7 @@ public class ClientController extends Thread {
 				}
 				
 			} catch (IOException | SQLException e) {
-				e.printStackTrace();
+				// e.printStackTrace();
 			}
 		}
 	}
