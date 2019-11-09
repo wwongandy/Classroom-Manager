@@ -1,3 +1,6 @@
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Student {
 
 	private int sid;
@@ -17,6 +20,15 @@ public class Student {
 	 */
 	public String toString() {
 		return "Student ID: " + stud_id + ", Name: " + fname + " " + sname;
+	}
+	
+	public static Student fromResultSet(ResultSet student) throws SQLException {
+		String sid = student.getString("SID");
+		String stud_id = student.getString("STUD_ID");
+		String fname = student.getString("FNAME");
+		String sname = student.getString("SNAME");
+		
+		return new Student(sid, stud_id, fname, sname);
 	}
 	
 	public int getSid() {
