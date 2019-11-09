@@ -21,17 +21,20 @@ public class ClientController extends Thread {
 		this.setInputFromClient(new DataInputStream(incomingSocket.getInputStream()));
 		this.setOutputToClient(new DataOutputStream(incomingSocket.getOutputStream()));
 		this.setConsoleScreen(consoleScreen);
+		writeToConsole("Connected to server.");
 	}
 	
 	public void run() {
 		while (true) {
 			try {
 				String inputString = inputFromClient.readUTF();
-				String[] requestBody = inputString.split("-");
 				
+				String[] requestBody = inputString.split("-");
 				String request = requestBody[0];
 				String dataObject = requestBody[1];
 				
+				System.out.println(request);
+				System.out.println(dataObject);
 				writeToConsole("Request received: " + request);
 				writeToConsole("Data received: " + dataObject);
 				
@@ -43,10 +46,10 @@ public class ClientController extends Thread {
 	
 	private void writeToConsole(String message) {
 		InetAddress netData = socket.getInetAddress();
-		String hostName = netData.getHostAddress();
 		String ipAddress = netData.getHostAddress();
 		
-		consoleScreen.append("[" + hostName + "] [" + ipAddress + "] " + message);
+		String out = "[" + ipAddress + "] " + message + '\n';
+		consoleScreen.append(out);
 	}
 
 	public Socket getSocket() {

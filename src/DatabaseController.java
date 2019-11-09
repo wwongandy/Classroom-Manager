@@ -23,7 +23,7 @@ public class DatabaseController {
 	}
 	
 	/**
-	 * Sets up JDBC connection to the locally hosted SQL database.
+	 * Sets up JDBC connection to the LocalHost database.
 	 */
 	private void connectToSQLDatabase() {
 		Properties connectionProps = new Properties();

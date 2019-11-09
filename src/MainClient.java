@@ -69,6 +69,17 @@ public class MainClient {
 		JButton buttonUserLogin = new JButton("Admin User Login");
 		buttonUserLogin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String username = fieldUsername.getText();
+				
+				if (username.isBlank()) {
+					return;
+				};
+				
+				try {
+					outputToServer.writeUTF("login-" + username);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 			}
 		});
 		buttonUserLogin.setBounds(260, 50, 140, 21);
@@ -147,7 +158,7 @@ public class MainClient {
 	}
 	
 	/**
-	 * Makes a connection to the localhost server
+	 * Makes a connection to the LocalHost server.
 	 */
 	public void initializeConnection() {
 		try {
@@ -160,10 +171,10 @@ public class MainClient {
 	};
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Initializes the connection to the server and the default login screen.
 	 */
 	private void initialize() {
-		initializeLoginScreen();
 		initializeConnection();
+		initializeLoginScreen();
 	}
 }

@@ -26,21 +26,29 @@ public class MainServer extends JFrame {
 	 * Starts the server and sets up the console screen content.
 	 */
 	public MainServer() {
+		initialize();
+	}
+	
+	/**
+	 * Initializes the server and sets up the console screen GUI.
+	 */
+	public void initialize() {
+		// Main frame setup.
 		getContentPane().setLayout(new BorderLayout());
 		consoleScreen.setEditable(false);
 		getContentPane().add(new JScrollPane(consoleScreen), BorderLayout.CENTER);
 		
-		// Main frame setup
 		setTitle("Server");
 		setSize(500, 300);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 		
+		// Server setup.
 		try {
 			ServerSocket serverSocket = new ServerSocket(MainServer.PORT_NUMBER);
 			consoleScreen.append("Server started at " + new Date() + '\n');
 			
-			// Listening for connections, for each: new thread to handle individual requests concurrently
+			// Listening for connections, for each: new thread to handle individual requests concurrently.
 			while (true) {
 				Socket incomingSocket = serverSocket.accept();
 				ClientController clientIn = new ClientController(incomingSocket, consoleScreen);
